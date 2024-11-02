@@ -1,5 +1,64 @@
 <script setup lang="ts">
-const store = useStore()
+import { ref, onBeforeMount } from 'vue'
+import type { Product } from '@/lib/types'
+import { apiFetch } from '@/lib/request'
+
+// export default {
+//   data () {
+//     return {
+//       loading: false,
+//       post: null,
+//       error: null
+//     }
+//   },
+//   created () {
+//     // fetch the data when the view is created and the data is
+//     // already being observed
+//     this.fetchData()
+//   },
+//   watch: {
+//     // call again the method if the route changes
+//     '$route': 'fetchData'
+//   },
+//   methods: {
+//     fetchData () {
+//       this.error = this.post = null
+//       this.loading = true
+//       const fetchedId = this.$route.params.id
+//       // replace `getPost` with your data fetching util / API wrapper
+//       getPost(fetchedId, (err, post) => {
+//         // make sure this request is the last one we did, discard otherwise
+//         if (this.$route.params.id !== fetchedId) return
+//         this.loading = false
+//         if (err) {
+//           this.error = err.toString()
+//         } else {
+//           this.post = post
+//         }
+//       })
+//     }
+//   }
+// }
+
+onBeforeMount (() => {
+  fetchProducts()
+})
+
+const loading = ref(false)
+const products = ref<Product[]>([])
+const error = ref<unknown | null>(null)
+
+const fetchProducts = async () => {
+  try {
+    loading.value = true
+    const response = await apiFetch('/products')
+    products.value = response.items
+  } catch (err) {
+    error.value = err
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 <template>
   <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
@@ -10,14 +69,13 @@ const store = useStore()
         </div>
       </div>
       <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
-        <ProductCard id="1" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="2" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="3" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="4" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="5" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="6" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="7" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
-        <ProductCard id="8" title='Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max' image-src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" />
+        <div v-if="loading">
+          Loading...
+        </div>
+        <div v-else-if="error">
+          <p>Error: {{ error }}</p>
+        </div>
+        <ProductCard v-for="product in products" v-else :id="product.id" :key="product.id" :title="product.name" :image-src="product.thumbnailUrl" />
       </div>
     </div>
   </section>
