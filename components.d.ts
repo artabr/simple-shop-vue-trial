@@ -11,7 +11,6 @@ declare module 'vue' {
     AppHeader: typeof import('./src/components/AppHeader/AppHeader.vue')['default']
     CartItem: typeof import('./src/components/CartItem/CartItem.vue')['default']
     CartPriceInput: typeof import('./src/components/CartPriceInput/CartPriceInput.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     ProductCard: typeof import('./src/components/ProductCard/ProductCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
