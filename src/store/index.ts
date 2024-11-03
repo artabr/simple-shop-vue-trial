@@ -27,6 +27,31 @@ export const useStore = defineStore('main', {
         this.cart.splice(index, 1)
       }
     },
+
+    clearCart() {
+      this.cart = []
+    },
+
+    updateCartQuantity({ id, quantity }: { id: number; quantity: number }) {
+      const item = this.cart.find(item => item.id === id)
+      if (item) {
+        item.quantity = quantity
+      }
+    },
+
+    incrementCartQuantity(id: number) {
+      const item = this.cart.find(item => item.id === id)
+      if (item) {
+        item.quantity++
+      }
+    },
+
+    decrementCartQuantity(id: number) {
+      const item = this.cart.find(item => item.id === id)
+      if (item && item.quantity > 1) {
+        item.quantity--
+      }
+    }
   },
 
   getters: {
