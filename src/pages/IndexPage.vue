@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
-import type { Product } from '@/lib/types'
 import { apiFetch } from '@/lib/request'
+import { useQuery } from '@pinia/colada'
+import type { ProductsResponse } from '@/lib/types'
 
 // export default {
 //   data () {
@@ -40,25 +40,31 @@ import { apiFetch } from '@/lib/request'
 //   }
 // }
 
-onBeforeMount (() => {
-  fetchProducts()
+// caching of the fetched data
+const { data, status, asyncStatus } = useQuery<ProductsResponse>({
+  key: ['products'],
+  query: () => apiFetch('/products'),
 })
 
-const loading = ref(false)
-const products = ref<Product[]>([])
-const error = ref<unknown | null>(null)
-
-const fetchProducts = async () => {
-  try {
-    loading.value = true
-    const response = await apiFetch('/products')
-    products.value = response.items
-  } catch (err) {
-    error.value = err
-  } finally {
-    loading.value = false
-  }
-}
+// onBeforeMount (() => {
+//   fetchProducts()
+// })
+//
+// const loading = ref(false)
+// const products = ref<Product[]>([])
+// const error = ref<unknown | null>(null)
+//
+// const fetchProducts = async () => {
+//   try {
+//     loading.value = true
+//     const response = await apiFetch('/products')
+//     products.value = response.items
+//   } catch (err) {
+//     error.value = err
+//   } finally {
+//     loading.value = false
+//   }
+// }
 </script>
 <template>
   <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
@@ -69,13 +75,13 @@ const fetchProducts = async () => {
         </div>
       </div>
       <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
-        <div v-if="loading">
+        <div v-if="asyncStatus === 'loading'">
           Loading...
         </div>
-        <div v-else-if="error">
-          <p>Error: {{ error }}</p>
+        <div v-else-if="status === 'error'">
+          <p>Error: {{ status }}</p>
         </div>
-        <ProductCard v-for="product in products" v-else :key="product.id" :product="product" />
+        <ProductCard v-for="product in data?.items" v-else :key="product.id" :product="product" />
       </div>
     </div>
   </section>

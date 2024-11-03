@@ -17,6 +17,14 @@ export type Product = {
   price: number;
 }
 
+export type ProductsResponse = {
+  total: number;
+  count: number;
+  offset: number;
+  limit: number;
+  items: Product[];
+}
+
 export type CartItem = {
   id: number;
   quantity: number;

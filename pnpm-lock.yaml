@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@pinia/colada':
+        specifier: ^0.11.1
+        version: 0.11.1
       '@unhead/vue':
         specifier: 1.11.10
         version: 1.11.10(vue@3.5.12(typescript@5.6.3))
@@ -589,6 +592,9 @@ packages:
 
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
+
+  '@pinia/colada@0.11.1':
+    resolution: {integrity: sha512-cL9mK3eLEzO7v8Js3JUYjnJnrncRSUS3GLHpLf7pHYn2hxLhbKVnUs/240AyoaQhG2AJiHHImW84H6O27LI1Wg==}
 
   '@pinia/testing@0.1.6':
     resolution: {integrity: sha512-Q40s3kpjXpjmcnc61l84wyG83yVmkBi5rRdSoPpwQoRfSnNKKr52XjFFt6hP8iBxehYS9NR+D57T1uzgnEVPHg==}
@@ -3342,6 +3348,8 @@ snapshots:
       fastq: 1.17.1
 
   '@one-ini/wasm@0.1.1': {}
+
+  '@pinia/colada@0.11.1': {}
 
   '@pinia/testing@0.1.6(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(vue@3.5.12(typescript@5.6.3))':
     dependencies:
