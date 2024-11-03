@@ -75,7 +75,7 @@ const fetchProducts = async () => {
         <div v-else-if="error">
           <p>Error: {{ error }}</p>
         </div>
-        <ProductCard v-for="product in products" v-else :id="product.id" :key="product.id" :title="product.name" :image-src="product.thumbnailUrl" />
+        <ProductCard v-for="product in products" v-else :key="product.id" :product="product" />
       </div>
     </div>
   </section>

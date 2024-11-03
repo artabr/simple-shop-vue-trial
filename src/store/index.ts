@@ -1,35 +1,48 @@
 import { defineStore } from 'pinia'
+import type { CartItem, Product } from '@/lib/types'
 
-const versionString =
-  import.meta.env.MODE === 'development' ? import.meta.env.VITE_APP_VERSION + '-dev' : import.meta.env.VITE_APP_VERSION
+type AppState = {
+  cart: CartItem[];
+}
 
 export const useStore = defineStore('main', {
-  state: () => ({
-    debug: import.meta.env.MODE === 'development',
-    version: versionString,
-    isInitialized: false,
-    count: 0,
+  state: (): AppState => ({
+    cart: [],
   }),
 
   actions: {
-    initApp() {
-      this.isInitialized = true
-      console.log('app initialized!')
+    addProductToCart(product: Product) {
+      const existingItem = this.cart.find(item => item.product.id === product.id)
+      if (existingItem) {
+        existingItem.quantity++
+      } else {
+        this.cart.push({
+          id: product.id,
+          quantity: 1,
+          product,
+        })
+      }
     },
 
-    increment(value = 1) {
-      this.count += value
-    },
-
-    goToDemo(event: Event) {
-      event.preventDefault()
-      this.router.push('/demo/')
+    removeProductFromCart(id: number) {
+      const index = this.cart.findIndex(item => item.id === id)
+      if (index !== -1) {
+        this.cart.splice(index, 1)
+      }
     },
   },
 
   getters: {
-    isReady: (state) => {
-      return !state.isInitialized
+    cartTotal(state) {
+      return state.cart.reduce((total, item) => total + item.product.price * item.quantity, 0)
     },
+
+    cartItemsCount(state) {
+      return state.cart.length
+    },
+
+    cartItems(state) {
+      return state.cart
+    }
   },
 })
