@@ -1,13 +1,10 @@
 import { defineStore } from 'pinia'
 import type { CartItem, Product } from '@/lib/types'
-
-type AppState = {
-  cart: CartItem[];
-}
+import { useLocalStorage } from '@vueuse/core'
 
 export const useStore = defineStore('main', {
-  state: (): AppState => ({
-    cart: [],
+  state: () => ({
+    cart: useLocalStorage<CartItem[]>('pinia/cart', []),
   }),
 
   actions: {
