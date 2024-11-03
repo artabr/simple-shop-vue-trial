@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import { toFixedNumber } from '@/lib/utils'
+
 const store = useStore()
+const storeRef = storeToRefs(store);
 
 const cart = store.cartItems
 console.log("cart", cart)
+
+const cartTotal = storeRef.cartTotal
+
+const tax = computed(() => toFixedNumber(cartTotal.value * 0.2))
+const total = computed(() => toFixedNumber(cartTotal.value + tax.value + 99))
+console.log("total", total)
 </script>
 
 <template>
@@ -27,13 +36,8 @@ console.log("cart", cart)
             <div class="space-y-4">
               <div class="space-y-2">
                 <dl class="flex items-center justify-between gap-4">
-                  <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Original price</dt>
-                  <dd class="text-base font-medium text-gray-900 dark:text-white">$7,592.00</dd>
-                </dl>
-
-                <dl class="flex items-center justify-between gap-4">
-                  <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Savings</dt>
-                  <dd class="text-base font-medium text-green-600">-$299.00</dd>
+                  <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Price</dt>
+                  <dd class="text-base font-medium text-gray-900 dark:text-white">${{ cartTotal }}</dd>
                 </dl>
 
                 <dl class="flex items-center justify-between gap-4">
@@ -43,13 +47,13 @@ console.log("cart", cart)
 
                 <dl class="flex items-center justify-between gap-4">
                   <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Tax</dt>
-                  <dd class="text-base font-medium text-gray-900 dark:text-white">$799</dd>
+                  <dd class="text-base font-medium text-gray-900 dark:text-white">${{ tax }}</dd>
                 </dl>
               </div>
 
               <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                 <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                <dd class="text-base font-bold text-gray-900 dark:text-white">$8,191.00</dd>
+                <dd class="text-base font-bold text-gray-900 dark:text-white">${{ total }}</dd>
               </dl>
             </div>
 

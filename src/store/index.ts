@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { CartItem, Product } from '@/lib/types'
 import { useLocalStorage } from '@vueuse/core'
+import { toFixedNumber } from '@/lib/utils'
 
 export const useStore = defineStore('main', {
   state: () => ({
@@ -56,7 +57,7 @@ export const useStore = defineStore('main', {
 
   getters: {
     cartTotal(state) {
-      return state.cart.reduce((total, item) => total + item.product.price * item.quantity, 0)
+      return state.cart.reduce((total, item) => toFixedNumber(total + item.product.price * item.quantity), 0)
     },
 
     cartItemsCount(state) {
